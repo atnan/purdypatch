@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'purdypatch'
+
+PurdyPatch::CLI.start(*ARGV)

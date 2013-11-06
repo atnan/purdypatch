@@ -5,7 +5,7 @@ require 'purdypatch/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "purdypatch"
-  gem.version       = Purdypatch::VERSION
+  gem.version       = PurdyPatch::VERSION
   gem.authors       = ["Nathan de Vries"]
   gem.email         = ["nathan@atnan.com"]
   gem.description   = %q{}
@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ["lib"]
+  gem.require_paths = ["lib", "lib/prettypatch"]
+
+  gem.add_dependency "mail"
 end
