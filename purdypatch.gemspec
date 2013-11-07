@@ -8,9 +8,9 @@ Gem::Specification.new do |gem|
   gem.version       = PurdyPatch::VERSION
   gem.authors       = ["Nathan de Vries"]
   gem.email         = ["nathan@atnan.com"]
-  gem.description   = %q{}
-  gem.summary       = %q{}
-  gem.homepage      = ""
+  gem.description   = %q{A tool for improving the format of git-format-patch emails, making them easier to review.}
+  gem.summary       = %q{Make your git-format-patch emails all purdy like.}
+  gem.homepage      = "https://github.com/atnan/purdypatch"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
