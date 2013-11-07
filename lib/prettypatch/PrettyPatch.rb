@@ -87,18 +87,6 @@ private
 
     SMALLEST_EQUAL_OPERATION = 3
 
-    OPENSOURCE_TRAC_URL = "http://trac.webkit.org/"
-
-    OPENSOURCE_DIRS = Set.new %w[
-        Examples
-        LayoutTests
-        PerformanceTests
-        Source
-        Tools
-        WebKitLibraries
-        Websites
-    ]
-
     IMAGE_CHECKSUM_ERROR = "INVALID: Image lacks a checksum. This will fail with a MISSING error in run-webkit-tests. Always generate new png files using run-webkit-tests."
 
     def self.normalize_line_ending(s)
@@ -133,29 +121,6 @@ private
             s.gsub /\r\n?/, "\n"
         end
     end
-
-    def self.find_url_and_path(file_path)
-        # Search file_path from the bottom up, at each level checking whether
-        # we've found a directory we know exists in the source tree.
-
-        dirname, basename = File.split(file_path)
-        dirname.split(/\//).reverse.inject(basename) do |path, directory|
-            path = directory + "/" + path
-
-            return [OPENSOURCE_TRAC_URL, path] if OPENSOURCE_DIRS.include?(directory)
-
-            path
-        end
-
-        [nil, file_path]
-    end
-
-    def self.linkifyFilename(filename)
-        url, pathBeneathTrunk = find_url_and_path(filename)
-
-        url.nil? ? filename : "<a href='#{url}browser/trunk/#{pathBeneathTrunk}'>#{filename}</a>"
-    end
-
 
     HEADER =<<EOF
 <html>
@@ -423,7 +388,7 @@ EOF
 
         def to_html
             str = "<div class='FileDiff'>\n"
-            str += "<h1>#{PrettyPatch.linkifyFilename(@filename)}</h1>\n"
+            str += "<h1>#{@filename}</h1>\n"
             if @image then
                 str += self.image_to_html
             elsif @git_image then
