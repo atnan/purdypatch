@@ -1,12 +1,16 @@
 Purdy Patch
 ===========
 
-The `purdypatch` tool provided by this gem takes patch emails created via `git-format-patch`, and inserts a prettified HTML version of the patch attachments into the email.
+This gem provides a `purdypatch` tool for improving the format of `git-format-patch` emails, making them easier for reviewers to read and reply to in a decentralized, email-based review system.
 
-My workflow is something like this:
+To get started, simply run `gem install purdypatch` to install the tool.
 
-    $ git format-patch --attach HEAD~1
+Once you have `purdypatch` installed, here's a simple workflow for sending out a patch for review:
+
+    $ git format-patch --to="Doge <sohip@suchclass.com>" --attach HEAD~1
     $ purdypatch *.patch
     $ git send-email *.purdypatch
 
-If you need to do decentralized patch reviews, hopefully this tool will be useful to you.
+According to [Devil’s Dictionary of Programming](http://programmingisterrible.com/post/65781074112/devils-dictionary-of-programming), `purdypatch` is simple, opinionated *and* lightweight.
+
+Enjoy.
