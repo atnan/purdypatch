@@ -1,3 +1,4 @@
+require 'cgi'
 require 'mail'
 require 'pathname'
 require 'purdypatch/version'
@@ -16,18 +17,29 @@ module PurdyPatch
         next unless patch_mail_path.exist?
 
         mail = Mail.read(patch_mail_path)
-        parts = mail.parts.dup
-        purdified = false
-        parts.each_with_index do |part, i|
-          next unless part.attachment? && part.content_type =~ %r(text/x-patch)
 
-          purdy_part = Mail::Part.new do
-            content_type 'text/html; charset=UTF-8'
-            body PrettyPatch.prettify(part.body.decoded)
+        purdified = false
+        mail.parts.dup.each_with_index do |part, i|
+          if part.content_type =~ %r(text/plain)
+            mail.parts[i] = Mail::Part.new do
+              content_type 'text/html; charset=UTF-8'
+              body "<html><body><pre>--\n#{ CGI::escapeHTML part.body.decoded }</pre></body></html>"
+            end
+
+          elsif part.attachment? && part.content_type =~ %r(text/x-patch)
+            purdy_part = Mail::Part.new do
+              content_type 'text/html; charset=UTF-8'
+              body PrettyPatch.prettify(part.body.decoded)
+            end
+
+            mail.parts.insert(i, purdy_part)
+            mail.header['X-Formatter'] = "PurdyPatch-#{PurdyPatch::VERSION}"
+            purdified = true
           end
-          mail.parts.insert(i, purdy_part)
-          mail.header['X-Formatter'] = "PurdyPatch-#{PurdyPatch::VERSION}"
-          purdified = true
+        end
+
+        mail.parts << Mail::Part.new do
+          content_type 'text/plain; charset=UTF-8'
         end
 
         if purdified
